@@ -1,22 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
     private Rigidbody rb;
     public float speed; // public vars available in the unity editor 
+    private int count;
+    public Text countText;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        count = 0;
+        setCountText();
     }
-
-
-    // Called before rendering a frame (most game code)
-    void Update () {
-		
-	}
 
     // Physics code -- updates 
     private void FixedUpdate()
@@ -37,6 +36,19 @@ public class PlayerController : MonoBehaviour {
         // Rigidbody -  Control of an object's position through physics simulation.
         // https://docs.unity3d.com/ScriptReference/Rigidbody.html
         rb.AddForce(movement * speed);
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Pick Up")){
+            other.gameObject.SetActive(false);
+            count++;
+            setCountText();
+        }
+    }
+
+    void setCountText()
+    {
+        countText.text = "Count: " + count.ToString();
     }
 }
